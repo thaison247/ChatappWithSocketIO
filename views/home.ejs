@@ -8,22 +8,48 @@
         //goi len server
         var socket = io("http://localhost:3000");
 
-        socket.on("Server-send-data", function (data) {
-            $("#content").append(data + ", ");
-        });
+        // socket.on("Server-send-data", function (data) {
+        //     $("#content").append(data + ", ");
+        // });
 
-        //alert("Hello Jquery");
+        // //alert("Hello Jquery");
+        // $(document).ready(function () {
+        //     $("#client").click(function () {
+        //         socket.emit("Client-send-data", "Hello");
+        //     });
+        // });
+
+        socket.on("Server-send-res", function (data) {
+            $("#result").html(data.res);
+            $("#A").val(data.a);
+            $("#B").val(data.b);
+        })
+
         $(document).ready(function () {
-            $("#client").click(function () {
-                socket.emit("Client-send-data", "Hello");
-            });
-        });
+            $("#submit").click(function () {
+                let data = new Object();
+                data.a = $("#A").val();
+                data.b = $("#B").val();
+                socket.emit("Client-send-exp", data);
+            })
+        })
     </script>
 </head>
 
 <body>
-    <div id="client">Click Here</div>
-    <h2 id="content"></h2>
+    <!-- <div id="client">Click Here</div>
+    <h2 id="content"></h2> -->
+    <div>
+        A = <input id="A" type="number">
+
+    </div>
+    <div>
+        B = <input id="B" type="number">
+
+    </div>
+    <div> A + B = <p id="result"></p>
+    </div>
+    <button id="submit">Send</button>
 </body>
 
 </html>

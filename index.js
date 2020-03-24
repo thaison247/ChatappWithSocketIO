@@ -10,15 +10,23 @@ server.listen(3000);
 
 io.on("connection", function(socket) {
   console.log("Co nguoi ket noi");
-  socket.on("disconnect", function() {
-    console.log(socket.id + " vua ngat ket noi");
-  });
+  // socket.on("disconnect", function() {
+  //   console.log(socket.id + " vua ngat ket noi");
+  // });
 
-  socket.on("Client-send-data", function(data) {
-    console.log(socket.id + " vua gui: " + data);
-    // io.sockets.emit("Server-send-data", data + "888");
-    socket.emit("Server-send-data", data + "888");
-    // socket.broadcast.emit("Server-send-data", data + "888");
+  // socket.on("Client-send-data", function(data) {
+  //   console.log(socket.id + " vua gui: " + data);
+  //   // io.sockets.emit("Server-send-data", data + "888");
+  //   socket.emit("Server-send-data", data + "888");
+  //   // socket.broadcast.emit("Server-send-data", data + "888");
+  // });
+  socket.on("Client-send-exp", function(data) {
+    let res = parseInt(data.a) + parseInt(data.b);
+    let exp = new Object();
+    exp.res = res;
+    exp.a = parseInt(data.a);
+    exp.b = parseInt(data.b);
+    io.sockets.emit("Server-send-res", exp);
   });
 });
 
