@@ -8,11 +8,16 @@ var server = require("http").Server(app);
 var io = require("socket.io")(server);
 server.listen(3000);
 
-io.on("connection", function(socket) {
+io.on("connection", function (socket) {
   console.log("Co nguoi ket noi");
-  socket.on("disconnect", function() {
+  socket.on("disconnect", function () {
     console.log(socket.id + " vua ngat ket noi");
   });
+
+  socket.on("Client-send-data", function (data) {
+    console.log(socket.id + " vua gui: " + data);
+  })
+
 });
 
 app.get("/", (req, res) => {

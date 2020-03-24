@@ -9,12 +9,16 @@
         var socket = io("http://localhost:3000");
 
         //alert("Hello Jquery");
-        $(document).ready(function () {})
+        $(document).ready(function () {
+            $("#client").click(function () {
+                socket.emit("Client-send-data", "Hello");
+            });
+        });
     </script>
 </head>
 
 <body>
-    Hello world!
+    <div id="client">Click Here</div>
 </body>
 
 </html>
