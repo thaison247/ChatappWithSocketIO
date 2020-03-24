@@ -8,6 +8,10 @@
         //goi len server
         var socket = io("http://localhost:3000");
 
+        socket.on("Server-send-data", function (data) {
+            $("#content").append(data + ", ");
+        });
+
         //alert("Hello Jquery");
         $(document).ready(function () {
             $("#client").click(function () {
@@ -19,6 +23,7 @@
 
 <body>
     <div id="client">Click Here</div>
+    <h2 id="content"></h2>
 </body>
 
 </html>
