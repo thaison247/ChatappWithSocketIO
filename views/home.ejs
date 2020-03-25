@@ -2,54 +2,39 @@
 
 <head>
     <title>Demo Socket IO</title>
+    <link rel="stylesheet" type="text/css" href="layout.css" />
     <script src="jquery.js"></script>
     <script src="socket.io/socket.io.js"></script>
-    <script>
-        //goi len server
-        var socket = io("http://localhost:3000");
+    <script src="xuly.js"></script>
 
-        // socket.on("Server-send-data", function (data) {
-        //     $("#content").append(data + ", ");
-        // });
-
-        // //alert("Hello Jquery");
-        // $(document).ready(function () {
-        //     $("#client").click(function () {
-        //         socket.emit("Client-send-data", "Hello");
-        //     });
-        // });
-
-        socket.on("Server-send-res", function (data) {
-            $("#result").html(data.res);
-            $("#A").val(data.a);
-            $("#B").val(data.b);
-        })
-
-        $(document).ready(function () {
-            $("#submit").click(function () {
-                let data = new Object();
-                data.a = $("#A").val();
-                data.b = $("#B").val();
-                socket.emit("Client-send-exp", data);
-            })
-        })
-    </script>
 </head>
 
 <body>
-    <!-- <div id="client">Click Here</div>
-    <h2 id="content"></h2> -->
-    <div>
-        A = <input id="A" type="number">
+    <div id="wrapper">
+        <div id="loginForm">
+            <h3>What's your name?</h3>
+            <input type="text" id="txtUsername" />
+            <input type="button" id="btnRegister" value="Register" />
+        </div>
+        <div id="chatForm">
+            <div id="left">
+                <div id="boxTitle">Online Users</div>
+                <div id="boxContent"></div>
+            </div>
+            <div id="right">
+                <div id="HiUser">
+                    Hello <span id="currentUser">Teo</span>
+                    <input type="button" value="Logout" id="btnLogout">
+                </div>
 
+                <div id="listMessages">
+                </div>
+                <div id="typingNoti"></div>
+                <input type="text" id="txtMessage">
+                <input type="button" id="btnSendMessage" value="Send">
+            </div>
+        </div>
     </div>
-    <div>
-        B = <input id="B" type="number">
-
-    </div>
-    <div> A + B = <p id="result"></p>
-    </div>
-    <button id="submit">Send</button>
 </body>
 
 </html>
