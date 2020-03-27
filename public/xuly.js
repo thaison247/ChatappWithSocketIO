@@ -1,61 +1,55 @@
 var socket = io("http://localhost:3000");
 
-socket.on("Server-send-RegisterFail", function() {
-  alert("Da co nguoi dang ki username nay");
-});
+socket.on("Server-send-joinSuccess", function(joinInfo) {
+  $("#login").hide(1000);
+  $("#chatlogs").show(1000);
+  $(".chat-form").show(1000);
 
-socket.on("Server-send-RegisterSuccess", function(data) {
-  $("#currentUser").html(data);
-  $("#loginForm").hide(2000);
-  $("#chatForm").show(1000);
-});
-
-socket.on("Server-send-ListUsers", function(data) {
-  $("#boxContent").html("");
-  data.forEach(function(i) {
-    $("#boxContent").append("<div class = 'user'>" + i + "</div>");
-  });
-});
-
-socket.on("Server-send-Message", function(data) {
-  $("#listMessages").append(
-    "<div id='message'>" + data.username + ": " + data.content + "</div>"
+  $("#chatlogs").append(
+    "<div class='chat friend'><div class='user-photo'><img src='#' alt='user image'></div><p class='chat-message'>" +
+      joinInfo.name +
+      ", Welcome to " +
+      joinInfo.room +
+      "</p></div>"
   );
 });
 
-// socket.on("Server-send-TypingUser", function(data) {
-//   $("#typingNoti")
-//     .html("")
-//     .html(data + " is typing");
-// });
+socket.on("Server-send-selfMessage", function(data) {
+  let msg =
+    "<div class='chat self'><div class='user-photo'>" +
+    data.sender +
+    "</div><p class='chat-message'>" +
+    data.message +
+    "</p></div>";
+  $("#chatlogs").append(msg);
+});
 
-// socket.on("Server-send-StopTypingNoti", function() {
-//   $("#typingNoti").html("");
-// });
+socket.on("Server-send-message", function(data) {
+  let msg =
+    "<div class='chat friend'><div class='user-photo'>" +
+    data.sender +
+    "</div><p class='chat-message'>" +
+    data.message +
+    "</p></div>";
+  $("#chatlogs").append(msg);
+});
+
+socket.on("Server-send-message", function(data) {});
 
 $(document).ready(function() {
-  $("#loginForm").show();
-  $("#chatForm").hide();
+  $("#login").show();
+  $("#chatlogs").hide();
+  $(".chat-form").hide();
 
-  $("#btnRegister").click(function() {
-    socket.emit("Client-send-Username", $("#txtUsername").val());
+  $("#btnJoinRoom").click(function() {
+    socket.emit("Client-join-room", {
+      name: $("#txtUsername").val(),
+      room: $("#txtRoomId").val()
+    });
   });
 
-  $("#btnLogout").click(function() {
-    socket.emit("Client-send-Logout");
-    $("#loginForm").show(1000);
-    $("#chatForm").hide(500);
+  $("#btnSend").click(function() {
+    let message = $("#txtMessage").val();
+    socket.emit("Client-send-message", message);
   });
-
-  $("#btnSendMessage").click(function() {
-    socket.emit("Client-send-Message", $("#txtMessage").val());
-  });
-
-  //   $("#txtMessage").focusin(function() {
-  //     socket.emit("Client-send-Typing");
-  //   });
-
-  //   $("#txtMessage").focusout(function() {
-  //     socket.emit("Client-send-StopTying");
-  //   });
 });

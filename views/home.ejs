@@ -10,29 +10,30 @@
 </head>
 
 <body>
-    <div id="wrapper">
-        <div id="loginForm">
-            <h3>What's your name?</h3>
-            <input type="text" id="txtUsername" />
-            <input type="button" id="btnRegister" value="Register" />
+    <div class="chatbox">
+        <div id="login">
+            <div>
+                <input type="text" id="txtUsername" placeholder="Your name?">
+            </div>
+            <div>
+                <input type="text" id="txtRoomId" placeholder="Room ID?">
+            </div>
+            <button id="btnJoinRoom">Submit</button>
         </div>
-        <div id="chatForm">
-            <div id="left">
-                <div id="boxTitle">Online Users</div>
-                <div id="boxContent"></div>
+        <div id="chatlogs" class="chatlogs">
+            <div class="chat friend">
+                <div class="user-photo"><img src="#" alt="user image"></div>
+                <p class="chat-message">What's up, bro!</p>
             </div>
-            <div id="right">
-                <div id="HiUser">
-                    Hello <span id="currentUser">Teo</span>
-                    <input type="button" value="Logout" id="btnLogout">
-                </div>
+            <div class="chat self">
+                <div class="user-photo"><img src="#" alt="user image"></div>
+                <p class="chat-message">How are you doing, bro!</p>
+            </div>
+        </div>
 
-                <div id="listMessages">
-                </div>
-                <div id="typingNoti"></div>
-                <input type="text" id="txtMessage">
-                <input type="button" id="btnSendMessage" value="Send">
-            </div>
+        <div class="chat-form">
+            <textarea id="txtMessage"></textarea>
+            <button id="btnSend">Send</button>
         </div>
     </div>
 </body>
