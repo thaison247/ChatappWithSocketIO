@@ -18,12 +18,17 @@ io.on("connection", function(socket) {
   // listen to a join request from client
   socket.on("Client-join-room", function(joinInfo) {
     console.log(joinInfo);
+    console.log(listUsers);
     // check duplicated username in one room
-    if (listUsers.indexOf(joinInfo) >= 0) {
+    if (
+      listUsers.findIndex(
+        user => joinInfo.name === user.name && joinInfo.room === user.room
+      ) >= 0
+    ) {
       socket.emit("Server-warning-duplicatedUsername");
     } else {
       listUsers.push(joinInfo);
-
+      console.log(listUsers);
       socket.join(joinInfo.room);
       socket.userName = joinInfo.name;
       socket.roomId = joinInfo.room;
@@ -52,23 +57,32 @@ io.on("connection", function(socket) {
         socket.emit("Server-send-selfMessage", data);
         socket.broadcast.to(socket.roomId).emit("Server-send-message", data);
       });
+
+      // One User log out
+      socket.on("disconnect", function() {
+        // remove username out of listUsers
+        listUsers.splice(listUsers.indexOf(socket.userName), 1);
+
+        // notify other clients
+        socket.broadcast
+          .to(socket.roomId)
+          .emit("Server-send-logoutUser", socket.userName);
+
+        // send list users to others in the room
+        let listUsersNow = usersFunc.findUsersByRoom(listUsers, joinInfo.room);
+        socket.broadcast
+          .to(socket.roomId)
+          .emit("Server-send-listUsers", listUsersNow);
+      });
     }
   });
 
-  socket.on("Client-send-Logout", function() {
-    // remove username out of listUsers
-    listUsers.splice(listUsers.indexOf(socket.userName), 1);
-
-    // notify other clients
-    socket.broadcast.emit("Server-send-ListUsers", listUsers);
-  });
-
-  socket.on("Client-send-Message", function(data) {
-    io.sockets.emit("Server-send-Message", {
-      username: socket.userName,
-      content: data
-    });
-  });
+  // socket.on("Client-send-Message", function(data) {
+  //   io.sockets.emit("Server-send-Message", {
+  //     username: socket.userName,
+  //     content: data
+  //   });
+  // });
 
   // socket.on("Client-send-Typing", function() {
   //   socket.broadcast.emit("Server-send-TypingUser", socket.userName);

@@ -75,6 +75,12 @@ socket.on("Server-send-selfMessage", function(data) {
 
 </div>`;
   $("#chatlogs").append(msg);
+  $("#chatlogs").animate(
+    {
+      scrollTop: $("#chatlogs").get(0).scrollHeight
+    },
+    1000
+  );
 });
 
 socket.on("Server-send-message", function(data) {
@@ -85,12 +91,58 @@ socket.on("Server-send-message", function(data) {
 	</div>
 </div>`;
   $("#chatlogs").append(msg);
+  $("#chatlogs").animate(
+    {
+      scrollTop: $("#chatlogs").get(0).scrollHeight
+    },
+    1000
+  );
+});
+
+socket.on("Server-send-logoutUser", function(logoutUser) {
+  let msg = `<div id="chat-friend" class="d-flex justify-content-start mb-4">
+    				<div class="img_cont_msg">
+  					<img src="https://static.turbosquid.com/Preview/001292/481/WV/_D.jpg" class="rounded-circle user_img_msg">
+  				</div>
+  				<div class="msg_cotainer"><span style="color: red">#${logoutUser}</span> has left this room!
+  	  				<span class="msg_time">8:40 AM, Today</span>
+    				</div>
+			  </div>`;
+
+  $("#chatlogs").append(msg);
+  $("#chatlogs").animate(
+    {
+      scrollTop: $("#chatlogs").get(0).scrollHeight
+    },
+    1000
+  );
+});
+
+socket.on("Server-send-listUsers", function(listUsers) {
+  $(".contacts").html("");
+  listUsers.forEach(user => {
+    let oneUser = `<li class="active">
+	  <div class="d-flex bd-highlight">
+		  <div class="user_info">
+			  <span>${user}</span>
+			  <p>${user} is online</p>
+		  </div>
+	  </div>
+  </li>`;
+    $(".contacts").append(oneUser);
+    $("#chatlogs").animate(
+      {
+        scrollTop: $("#chatlogs").get(0).scrollHeight
+      },
+      1000
+    );
+  });
 });
 
 $(document).ready(function() {
-  //   $("#action_menu_btn").click(function() {
-  //     $(".action_menu").toggle();
-  //   });
+  $("#action_menu_btn").click(function() {
+    $(".action_menu").toggle();
+  });
 
   $("#login").show();
   $("#chat-form").hide();
