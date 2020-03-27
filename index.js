@@ -1,4 +1,5 @@
 var express = require("express");
+var moment = require("moment");
 var app = express();
 app.use(express.static("./public"));
 app.set("view engine", "ejs");
@@ -39,6 +40,7 @@ io.on("connection", function(socket) {
         joinInfo.room
       );
       returnData.joinInfo = joinInfo;
+      returnData.time = moment().calendar();
 
       // send a join succeeded respone to client
       socket.emit("Server-send-joinSuccess", returnData);
@@ -54,6 +56,7 @@ io.on("connection", function(socket) {
         let data = new Object();
         data.message = message;
         data.userName = socket.userName;
+        data.time = moment().calendar();
         socket.emit("Server-send-selfMessage", data);
         socket.broadcast.to(socket.roomId).emit("Server-send-message", data);
       });
@@ -64,9 +67,10 @@ io.on("connection", function(socket) {
         listUsers.splice(listUsers.indexOf(socket.userName), 1);
 
         // notify other clients
-        socket.broadcast
-          .to(socket.roomId)
-          .emit("Server-send-logoutUser", socket.userName);
+        let noti = new Object();
+        noti.userName = socket.userName;
+        noti.time = moment().calendar();
+        socket.broadcast.to(socket.roomId).emit("Server-send-logoutUser", noti);
 
         // send list users to others in the room
         let listUsersNow = usersFunc.findUsersByRoom(listUsers, joinInfo.room);
