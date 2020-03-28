@@ -41,7 +41,7 @@ io.on("connection", function(socket) {
       );
       // console.log(returnData.listUsers);
       returnData.joinInfo = joinInfo;
-      returnData.time = moment().calendar();
+      returnData.time = moment().format("h:mm A");
 
       // send a join succeeded respone to client
       socket.emit("Server-send-joinSuccess", returnData);
@@ -57,7 +57,7 @@ io.on("connection", function(socket) {
         let data = new Object();
         data.message = message;
         data.userName = socket.userName;
-        data.time = moment().calendar();
+        data.time = moment().format("h:mm A");
         socket.emit("Server-send-selfMessage", data);
         socket.broadcast.to(socket.roomId).emit("Server-send-message", data);
       });
@@ -74,7 +74,7 @@ io.on("connection", function(socket) {
         // notify other clients
         let noti = new Object();
         noti.userName = socket.userName;
-        noti.time = moment().calendar();
+        noti.time = moment().format("h:mm A");
         socket.broadcast.to(socket.roomId).emit("Server-send-logoutUser", noti);
 
         // send list users to others in the room

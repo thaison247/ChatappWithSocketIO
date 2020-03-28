@@ -162,7 +162,9 @@ $(document).ready(function() {
     let message = $(".type_msg").val();
     $(".type_msg").val("");
     $(".type_msg")[0].focus();
-    socket.emit("Client-send-message", message);
+    if (message !== "") {
+      socket.emit("Client-send-message", message);
+    }
   });
 
   $(".type_msg").keypress(function(event) {
@@ -172,11 +174,17 @@ $(document).ready(function() {
       let message = $(".type_msg").val();
       $(".type_msg").val("");
       $(".type_msg")[0].focus();
-      socket.emit("Client-send-message", message);
+      if (message !== "") {
+        socket.emit("Client-send-message", message);
+      }
     }
   });
 
   $("#exit_btn").click(function() {
     location.reload();
+  });
+
+  $("textarea").emojioneArea({
+    pickerPosition: "bottom"
   });
 });
