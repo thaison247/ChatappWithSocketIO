@@ -150,7 +150,8 @@ $(document).ready(function() {
   $("#login").show();
   $("#chat-form").hide();
 
-  $("#btnJoinRoom").click(function() {
+  $("#join-form").submit(function(e) {
+    e.preventDefault();
     socket.emit("Client-join-room", {
       name: $("#txtUsername").val(),
       room: $("#txtRoomId").val()
@@ -160,14 +161,17 @@ $(document).ready(function() {
   $(".send_btn").click(function() {
     let message = $(".type_msg").val();
     $(".type_msg").val("");
+    $(".type_msg")[0].focus();
     socket.emit("Client-send-message", message);
   });
 
   $(".type_msg").keypress(function(event) {
     var keycode = event.keyCode ? event.keyCode : event.which;
     if (keycode == "13") {
+      event.preventDefault();
       let message = $(".type_msg").val();
       $(".type_msg").val("");
+      $(".type_msg")[0].focus();
       socket.emit("Client-send-message", message);
     }
   });

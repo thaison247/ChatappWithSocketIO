@@ -276,3 +276,7 @@
 			margin-bottom: 15px !important;
 		}
 	}
+
+	.form-control{
+		width: 100%;
+	}
