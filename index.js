@@ -18,8 +18,8 @@ io.on("connection", function(socket) {
   console.log("Co nguoi ket noi");
   // listen to a join request from client
   socket.on("Client-join-room", function(joinInfo) {
-    console.log(joinInfo);
-    console.log(listUsers);
+    // console.log(joinInfo);
+    // console.log(listUsers);
     // check duplicated username in one room
     if (
       listUsers.findIndex(
@@ -29,7 +29,7 @@ io.on("connection", function(socket) {
       socket.emit("Server-warning-duplicatedUsername");
     } else {
       listUsers.push(joinInfo);
-      console.log(listUsers);
+      // console.log("da join room", listUsers);
       socket.join(joinInfo.room);
       socket.userName = joinInfo.name;
       socket.roomId = joinInfo.room;
@@ -39,6 +39,7 @@ io.on("connection", function(socket) {
         listUsers,
         joinInfo.room
       );
+      // console.log(returnData.listUsers);
       returnData.joinInfo = joinInfo;
       returnData.time = moment().calendar();
 
@@ -61,10 +62,14 @@ io.on("connection", function(socket) {
         socket.broadcast.to(socket.roomId).emit("Server-send-message", data);
       });
 
-      // One User log out
       socket.on("disconnect", function() {
         // remove username out of listUsers
-        listUsers.splice(listUsers.indexOf(socket.userName), 1);
+        listUsers.splice(
+          listUsers.findIndex(
+            user => socket.userName === user.name && socket.roomId === user.room
+          ),
+          1
+        );
 
         // notify other clients
         let noti = new Object();

@@ -24,6 +24,8 @@ socket.on("Server-send-joinSuccess", function(returnData) {
   $("#chatlogs").append(msg);
   $(".user_info > span").html("#" + room);
 
+  $(".contacts").html("");
+
   let listUsers = returnData.listUsers;
   listUsers.forEach(user => {
     let oneUser = `<li class="active">
@@ -168,5 +170,9 @@ $(document).ready(function() {
       $(".type_msg").val("");
       socket.emit("Client-send-message", message);
     }
+  });
+
+  $("#exit_btn").click(function() {
+    location.reload();
   });
 });
